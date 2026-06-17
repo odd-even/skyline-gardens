@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
+function getResendApiKey() {
+  return process.env.RESEND_API_KEY ?? process.env.SkylineEmailKey;
+}
+
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const { name, email, message } = body;
@@ -9,7 +13,7 @@ export async function POST(request: NextRequest) {
   }
 
   const contactEmail = process.env.CONTACT_EMAIL ?? "info@skylinegardens.ca";
-  const resendKey = process.env.RESEND_API_KEY;
+  const resendKey = getResendApiKey();
 
   if (resendKey) {
     const response = await fetch("https://api.resend.com/emails", {
