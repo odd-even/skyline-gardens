@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-skyline-teal: #1b616d;
+  --color-skyline-green: #2d5a3d;
+  --color-skyline-green-dark: #1e3d2a;
+  --color-skyline-pink: #ff007f;
+  --color-skyline-gray: #333333;
+  --color-skyline-gray-light: #666666;
+  --font-heading: var(--font-roboto-condensed);
+  --font-body: var(--font-roboto);
+  --font-nav: var(--font-oswald);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body), system-ui, sans-serif;
+  color: var(--color-skyline-gray);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+}
+
+.section-heading {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4.3rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-skyline-gray);
+}
+
+.section-subheading {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  font-weight: 700;
+  color: var(--color-skyline-gray);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--color-skyline-green-dark);
+  color: white;
+  font-family: var(--font-nav), system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.875rem 1.5rem;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.decorative-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.decorative-lines span {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.decorative-lines span:nth-child(1) {
+  width: 52px;
+  background: #8fbc4a;
+}
+.decorative-lines span:nth-child(2) {
+  width: 78px;
+  background: #4a8f3f;
+}
+.decorative-lines span:nth-child(3) {
+  width: 104px;
+  background: #1d2600;
+}
+
+.hero-heading {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-size: clamp(2.75rem, 4.5vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--color-skyline-gray);
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-skyline-pink);
+  color: white;
+  font-family: var(--font-oswald), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.9rem 1.75rem;
+  transition: background-color 0.2s;
+}
+
+.hero-cta:hover {
+  background: var(--color-skyline-teal);
+}
+
+.content-max {
+  width: 100%;
+  max-width: 1500px;
+  margin-left: auto;
+  margin-right: auto;
+}
