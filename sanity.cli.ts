@@ -1,9 +1,10 @@
 import { defineCliConfig } from "sanity/cli";
+import { sanityDataset, sanityProjectId } from "./src/sanity/env";
 
 export default defineCliConfig({
   api: {
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+    projectId: sanityProjectId,
+    dataset: sanityDataset,
   },
   studioHost: "skyline-gardens",
 });

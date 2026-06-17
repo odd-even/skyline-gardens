@@ -26,7 +26,7 @@ function SocialButton({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="flex h-10 w-10 items-center justify-center border border-white/25 text-white transition-colors hover:border-skyline-pink hover:bg-skyline-pink/10 hover:text-white"
+      className="flex h-10 w-10 items-center justify-center rounded-button border border-white/25 text-white transition-colors hover:border-skyline-pink hover:bg-skyline-pink/10 hover:text-white"
     >
       {children}
     </a>
@@ -39,9 +39,9 @@ export async function Footer() {
   const phoneDigits = settings.phone.replace(/\D/g, "");
 
   return (
-    <footer className="border-t-4 border-skyline-pink bg-[#1d2600] text-white">
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-14">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+    <footer className="border-t border-skyline-pink bg-[#1d2600] text-white">
+      <div className="content-max px-5 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-14">
+        <div className="grid gap-8 sm:gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block">
               <Image
@@ -115,7 +115,7 @@ export async function Footer() {
                 href={settings.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center border border-white/40 px-5 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-[0.14em] text-white transition-colors hover:border-white hover:bg-white/10"
+                className="inline-flex items-center justify-center rounded-button border border-white/40 px-5 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-[0.14em] text-white transition-colors hover:border-white hover:bg-white/10"
               >
                 Get Directions
               </a>
@@ -144,7 +144,7 @@ export async function Footer() {
       </div>
 
       <div className="border-t border-white/10 bg-black/20">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 py-6 text-center text-sm text-white/70 lg:flex-row lg:justify-between lg:px-8 lg:text-left">
+        <div className="content-max flex flex-col items-center gap-6 px-6 py-6 text-center text-sm text-white/70 lg:flex-row lg:justify-between lg:px-8 lg:text-left">
           <p>
             Copyright © {year} Skyline Gardens. All rights reserved.
           </p>
@@ -164,7 +164,7 @@ export async function Footer() {
                 alt="Designed by Darrow Design"
                 width={160}
                 height={48}
-                className="h-8 w-auto"
+                className="h-8 w-auto brightness-0 invert"
               />
             </a>
           </div>

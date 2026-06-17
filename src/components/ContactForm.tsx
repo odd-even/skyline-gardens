@@ -12,8 +12,8 @@ export function ContactForm({ variant = "default" }: ContactFormProps) {
   const isOverlay = variant === "overlay";
 
   const inputClassName = isOverlay
-    ? "w-full border border-gray-200 bg-white px-4 py-3 text-sm text-skyline-gray outline-none focus:border-skyline-teal"
-    : "w-full border border-gray-300 px-4 py-3 text-sm outline-none focus:border-skyline-teal";
+    ? "form-field w-full border border-gray-200 bg-white px-4 py-3 text-sm text-skyline-gray outline-none focus:border-skyline-teal"
+    : "form-field w-full border border-gray-300 px-4 py-3 text-sm outline-none focus:border-skyline-teal";
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

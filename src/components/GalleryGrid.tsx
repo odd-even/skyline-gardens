@@ -57,13 +57,13 @@ export function GalleryGrid({ images }: GalleryGridProps) {
 
   return (
     <>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         {images.map((image, index) => (
           <button
             key={image.src}
             type="button"
             onClick={() => setActiveIndex(index)}
-            className="group relative aspect-[4/3] cursor-zoom-in overflow-hidden rounded bg-gray-100"
+            className="group relative aspect-[4/3] cursor-zoom-in overflow-hidden rounded-button bg-gray-100"
             aria-label={`View ${image.alt}`}
           >
             <Image
@@ -88,7 +88,7 @@ export function GalleryGrid({ images }: GalleryGridProps) {
           <button
             type="button"
             onClick={close}
-            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-2xl text-white transition-colors hover:bg-white/20"
+            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-button bg-white/10 text-2xl text-white transition-colors hover:bg-white/20"
             aria-label="Close gallery"
           >
             ×
@@ -101,7 +101,7 @@ export function GalleryGrid({ images }: GalleryGridProps) {
                 event.stopPropagation();
                 showPrev();
               }}
-              className="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-3xl text-white transition-colors hover:bg-white/20"
+              className="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-button bg-white/10 text-3xl text-white transition-colors hover:bg-white/20"
               aria-label="Previous image"
             >
               ‹
@@ -129,7 +129,7 @@ export function GalleryGrid({ images }: GalleryGridProps) {
                 event.stopPropagation();
                 showNext();
               }}
-              className="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-3xl text-white transition-colors hover:bg-white/20"
+              className="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-button bg-white/10 text-3xl text-white transition-colors hover:bg-white/20"
               aria-label="Next image"
             >
               ›

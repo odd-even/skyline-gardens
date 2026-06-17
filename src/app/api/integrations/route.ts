@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getProducts } from "@/lib/products";
-import { isSanityConfigured } from "@/sanity/client";
+import { isSanityConfigured, projectId as sanityProjectId } from "@/sanity/client";
 
 export async function GET() {
   const products = await getProducts();
@@ -23,7 +23,7 @@ export async function GET() {
     },
     sanity: {
       configured: isSanityConfigured,
-      projectId: isSanityConfigured ? process.env.NEXT_PUBLIC_SANITY_PROJECT_ID : null,
+      projectId: sanityProjectId,
     },
     contact: {
       configured: Boolean(process.env.RESEND_API_KEY),

@@ -29,7 +29,7 @@ export function StoreHours({ settings }: StoreHoursProps) {
   }, [settings]);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/15 bg-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.25)] backdrop-blur-md">
+    <div className="overflow-hidden rounded-button border border-white/15 bg-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.25)] backdrop-blur-md">
       <div className="border-b border-white/10 px-5 py-5 sm:px-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
@@ -58,7 +58,7 @@ export function StoreHours({ settings }: StoreHoursProps) {
             <p className="mt-1 text-sm text-white/75">{status.detail}</p>
           </div>
 
-          <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">
+          <div className="rounded-button border border-white/15 bg-white/10 px-3 py-1.5">
             <p className="font-[family-name:var(--font-oswald)] text-[11px] font-medium uppercase tracking-[0.16em] text-white/80">
               Hours
             </p>
@@ -69,7 +69,7 @@ export function StoreHours({ settings }: StoreHoursProps) {
       <div className="divide-y divide-white/10">
         {blocks.map((block) => (
           <div key={block.title} className="px-5 py-5 sm:px-6">
-            <p className="mb-4 font-[family-name:var(--font-oswald)] text-[11px] font-medium uppercase tracking-[0.2em] text-white/55">
+            <p className="mb-4 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-[0.2em] text-white/55">
               {block.title}
             </p>
             <dl className="space-y-3">
@@ -78,8 +78,8 @@ export function StoreHours({ settings }: StoreHoursProps) {
                   key={`${block.title}-${row.label}`}
                   className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-baseline gap-3 border-b border-white/5 pb-3 last:border-b-0 last:pb-0"
                 >
-                  <dt className="text-sm font-medium text-white/90">{row.label}</dt>
-                  <dd className="text-right font-[family-name:var(--font-oswald)] text-sm tracking-wide text-white">
+                  <dt className="text-base font-medium text-white/90">{row.label}</dt>
+                  <dd className="text-right font-[family-name:var(--font-oswald)] text-base tracking-wide text-white">
                     {row.hours}
                   </dd>
                 </div>

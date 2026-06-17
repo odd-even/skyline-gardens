@@ -87,7 +87,7 @@ export function LocationMap({ address, zoom = 12 }: LocationMapProps) {
     return (
       <div
         id="location"
-        className="flex h-[400px] items-center justify-center bg-[#1d2600] px-6 text-center text-sm text-white/80 lg:h-[450px]"
+        className="flex h-[320px] items-center justify-center bg-[#1d2600] px-6 text-center text-sm text-white/80 sm:h-[380px] lg:h-[450px]"
       >
         {error}
       </div>
@@ -98,7 +98,7 @@ export function LocationMap({ address, zoom = 12 }: LocationMapProps) {
     <div
       id="location"
       ref={containerRef}
-      className="h-[400px] w-full bg-[#1d2600] lg:h-[450px]"
+      className="h-[320px] w-full bg-[#1d2600] sm:h-[380px] lg:h-[450px]"
       role="region"
       aria-label="Skyline Gardens location on Google Maps"
     />

@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export function FloatingActions() {
   return (
-    <div className="fixed bottom-6 left-4 z-40 flex flex-col gap-3">
+    <div className="fixed bottom-5 right-4 z-40 hidden flex-col gap-3 pb-[env(safe-area-inset-bottom)] md:flex">
       <Link
         href="/#contact"
-        className="flex h-12 w-12 items-center justify-center rounded bg-skyline-pink text-white shadow-lg transition-transform hover:scale-105"
+        className="flex h-12 w-12 items-center justify-center rounded-button bg-skyline-pink text-white shadow-lg transition-transform hover:scale-105"
         aria-label="Contact us"
       >
         <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -13,7 +13,7 @@ export function FloatingActions() {
         </svg>
       </Link>
 
-      <div className="flex flex-col overflow-hidden rounded bg-[#3d3d3d] shadow-lg">
+      <div className="flex flex-col overflow-hidden rounded-button bg-[#3d3d3d] shadow-lg">
         <a
           href="https://www.facebook.com/skylinegardenskeswickridge"
           target="_blank"

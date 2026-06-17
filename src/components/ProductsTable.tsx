@@ -72,7 +72,7 @@ export function ProductsTable({ rows }: ProductsTableProps) {
     <div>
       <div
         ref={searchRef}
-        className="sticky z-40 -mx-6 mb-6 bg-white px-6 py-4 lg:-mx-8 lg:px-8"
+        className="sticky z-40 -mx-5 mb-5 bg-white px-5 py-3 sm:-mx-6 sm:mb-6 sm:px-6 sm:py-4 lg:-mx-8 lg:px-8"
         style={{ top: headerHeight }}
       >
         <label htmlFor="product-search" className="sr-only">
@@ -84,27 +84,27 @@ export function ProductsTable({ rows }: ProductsTableProps) {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search by type, specie, or variety…"
-          className="w-full max-w-md border border-gray-300 px-4 py-3 text-sm outline-none focus:border-skyline-teal"
+          className="form-field w-full max-w-md border border-gray-300 px-4 py-3 text-sm outline-none focus:border-skyline-teal"
         />
         <p className="mt-2 text-sm text-skyline-gray-light">
           Showing {filteredRows.length.toLocaleString()} of {rows.length.toLocaleString()} products
         </p>
       </div>
 
-      <div className="rounded-xl border border-black/10 shadow-sm">
-        <table className="min-w-full border-separate border-spacing-0 text-left text-sm">
+      <div className="overflow-x-auto rounded-xl border border-black/10 shadow-sm">
+        <table className="min-w-[480px] w-full border-separate border-spacing-0 text-left text-sm">
             <thead
               className="sticky z-30 bg-skyline-green-dark text-white shadow-[0_1px_0_rgba(0,0,0,0.15)]"
               style={{ top: tableHeadTop }}
             >
               <tr>
-                <th className="px-4 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-wider">
+                <th className="px-3 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-wider sm:px-4">
                   Type
                 </th>
-                <th className="px-4 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-wider">
+                <th className="px-3 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-wider sm:px-4">
                   Specie
                 </th>
-                <th className="px-4 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-wider">
+                <th className="px-3 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-wider sm:px-4">
                   Variety
                 </th>
               </tr>
@@ -115,13 +115,13 @@ export function ProductsTable({ rows }: ProductsTableProps) {
                   key={`${row.type}-${row.specie}-${row.variety}-${index}`}
                   className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
                 >
-                  <td className="border-t border-black/5 px-4 py-2.5 align-top font-medium text-skyline-gray">
+                  <td className="border-t border-black/5 px-3 py-2.5 align-top font-medium text-skyline-gray sm:px-4">
                     {row.type}
                   </td>
-                  <td className="border-t border-black/5 px-4 py-2.5 align-top text-skyline-gray-light">
+                  <td className="border-t border-black/5 px-3 py-2.5 align-top text-skyline-gray-light sm:px-4">
                     {row.specie}
                   </td>
-                  <td className="border-t border-black/5 px-4 py-2.5 align-top text-skyline-gray-light">
+                  <td className="border-t border-black/5 px-3 py-2.5 align-top text-skyline-gray-light sm:px-4">
                     {row.variety || "—"}
                   </td>
                 </tr>
