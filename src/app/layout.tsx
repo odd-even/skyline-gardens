@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import { Oswald, Roboto, Roboto_Condensed } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/Header";
-import { FloatingActions } from "@/components/FloatingActions";
-import { ElfsightScript } from "@/components/elfsight/ElfsightScript";
-import { EmailListPopup } from "@/components/EmailListPopup";
-import { ClickToCall } from "@/components/ClickToCall";
 
 const oswald = Oswald({
   subsets: ["latin"],
@@ -51,14 +46,7 @@ export default function RootLayout({
       lang="en"
       className={`${oswald.variable} ${roboto.variable} ${robotoCondensed.variable}`}
     >
-      <body className="bg-white antialiased">
-        <ElfsightScript />
-        <EmailListPopup />
-        <ClickToCall />
-        <Header />
-        <FloatingActions />
-        <main>{children}</main>
-      </body>
+      <body className="bg-white antialiased">{children}</body>
     </html>
   );
 }
