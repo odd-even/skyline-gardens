@@ -5,6 +5,7 @@ export const ELFSIGHT_WIDGETS = {
   emailPopup: "c18f630a-679b-4ace-ae24-f73137f9f782",
   socialFeed: "b5a8cf17-b181-4349-ad5a-c049dc2d99c2",
   clickToCall: "23ab2b81-9fce-4a3a-babd-f05534a12b1f",
+  contactForm: "7a09927b-490f-444c-bd15-2cd5bfd20c3d",
 } as const;
 
 export function elfsightAppClass(appId: string) {

@@ -85,10 +85,7 @@ export function LocationMap({ address, zoom = 12 }: LocationMapProps) {
 
   if (error) {
     return (
-      <div
-        id="location"
-        className="flex h-[320px] items-center justify-center bg-[#1d2600] px-6 text-center text-sm text-white/80 sm:h-[380px] lg:h-[450px]"
-      >
+      <div className="flex h-[320px] items-center justify-center bg-[#1d2600] px-6 text-center text-sm text-white/80 sm:h-[380px] lg:h-[450px]">
         {error}
       </div>
     );
@@ -96,7 +93,6 @@ export function LocationMap({ address, zoom = 12 }: LocationMapProps) {
 
   return (
     <div
-      id="location"
       ref={containerRef}
       className="h-[320px] w-full bg-[#1d2600] sm:h-[380px] lg:h-[450px]"
       role="region"

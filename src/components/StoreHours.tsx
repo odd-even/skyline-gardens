@@ -29,7 +29,7 @@ export function StoreHours({ settings }: StoreHoursProps) {
   }, [settings]);
 
   return (
-    <div className="overflow-hidden rounded-button border border-white/15 bg-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.25)] backdrop-blur-md">
+    <div className="flex h-full flex-col overflow-hidden rounded-button border border-white/15 bg-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.25)] backdrop-blur-md">
       <div className="border-b border-white/10 px-5 py-5 sm:px-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
@@ -66,7 +66,7 @@ export function StoreHours({ settings }: StoreHoursProps) {
         </div>
       </div>
 
-      <div className="divide-y divide-white/10">
+      <div className="flex flex-1 flex-col divide-y divide-white/10">
         {blocks.map((block) => (
           <div key={block.title} className="px-5 py-5 sm:px-6">
             <p className="mb-4 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-[0.2em] text-white/55">

@@ -11,7 +11,6 @@ export function ProductsTable({ rows }: ProductsTableProps) {
   const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
-  const [searchHeight, setSearchHeight] = useState(0);
 
   const filteredRows = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -46,28 +45,6 @@ export function ProductsTable({ rows }: ProductsTableProps) {
     };
   }, []);
 
-  useEffect(() => {
-    const search = searchRef.current;
-    if (!search) {
-      return;
-    }
-
-    const updateSearchHeight = () => {
-      setSearchHeight(search.getBoundingClientRect().height);
-    };
-
-    updateSearchHeight();
-
-    const observer = new ResizeObserver(updateSearchHeight);
-    observer.observe(search);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  const tableHeadTop = headerHeight + searchHeight;
-
   return (
     <div>
       <div
@@ -93,39 +70,36 @@ export function ProductsTable({ rows }: ProductsTableProps) {
 
       <div className="overflow-x-auto rounded-xl border border-black/10 shadow-sm">
         <table className="min-w-[480px] w-full border-separate border-spacing-0 text-left text-sm">
-            <thead
-              className="sticky z-30 bg-skyline-green-dark text-white shadow-[0_1px_0_rgba(0,0,0,0.15)]"
-              style={{ top: tableHeadTop }}
-            >
-              <tr>
-                <th className="px-3 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-wider sm:px-4">
-                  Type
-                </th>
-                <th className="px-3 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-wider sm:px-4">
-                  Specie
-                </th>
-                <th className="px-3 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-wider sm:px-4">
-                  Variety
-                </th>
+          <thead className="bg-skyline-green-dark text-white">
+            <tr>
+              <th className="px-3 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-wider sm:px-4">
+                Type
+              </th>
+              <th className="px-3 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-wider sm:px-4">
+                Specie
+              </th>
+              <th className="px-3 py-3 font-[family-name:var(--font-oswald)] text-xs font-medium uppercase tracking-wider sm:px-4">
+                Variety
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredRows.map((row, index) => (
+              <tr
+                key={`${row.type}-${row.specie}-${row.variety}-${index}`}
+                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+              >
+                <td className="border-t border-black/5 px-3 py-2.5 align-top font-medium text-skyline-gray sm:px-4">
+                  {row.type}
+                </td>
+                <td className="border-t border-black/5 px-3 py-2.5 align-top text-skyline-gray-light sm:px-4">
+                  {row.specie}
+                </td>
+                <td className="border-t border-black/5 px-3 py-2.5 align-top text-skyline-gray-light sm:px-4">
+                  {row.variety || "—"}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredRows.map((row, index) => (
-                <tr
-                  key={`${row.type}-${row.specie}-${row.variety}-${index}`}
-                  className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                >
-                  <td className="border-t border-black/5 px-3 py-2.5 align-top font-medium text-skyline-gray sm:px-4">
-                    {row.type}
-                  </td>
-                  <td className="border-t border-black/5 px-3 py-2.5 align-top text-skyline-gray-light sm:px-4">
-                    {row.specie}
-                  </td>
-                  <td className="border-t border-black/5 px-3 py-2.5 align-top text-skyline-gray-light sm:px-4">
-                    {row.variety || "—"}
-                  </td>
-                </tr>
-              ))}
+            ))}
           </tbody>
         </table>
       </div>
