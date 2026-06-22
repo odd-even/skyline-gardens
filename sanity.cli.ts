@@ -6,5 +6,5 @@ export default defineCliConfig({
     projectId: SANITY_PROJECT_ID,
     dataset: SANITY_DATASET,
   },
-  studioHost: "skyline-gardens",
+  studioHost: "skylinegardens",
 });
