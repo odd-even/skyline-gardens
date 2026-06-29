@@ -627,8 +627,20 @@ export function getMillisecondsUntilNextStatusChange(
     : Math.min(midnightDelay, scheduleChangeDelay);
 }
 
-export function getHoursBlocks(settings: SiteSettings): HoursBlock[] {
+export function getAllHoursBlocks(settings: SiteSettings): HoursBlock[] {
   return resolveSchedules(settings).map((schedule) =>
     parseHoursBlock(schedule.hours, schedule.title),
   );
+}
+
+/** Hours blocks currently in effect (excludes past and future schedules). */
+export function getHoursBlocks(settings: SiteSettings, date = new Date()): HoursBlock[] {
+  const today = getAtlanticCalendarDate(date);
+
+  return resolveSchedules(settings)
+    .filter((schedule) => {
+      const start = parseIsoDate(schedule.startsOn);
+      return isBetweenInclusive(today, start, schedule.effectiveEnd);
+    })
+    .map((schedule) => parseHoursBlock(schedule.hours, schedule.title));
 }
