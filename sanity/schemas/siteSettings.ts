@@ -101,16 +101,71 @@ export const siteSettings = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "aprilHours",
-      title: "April Hours",
-      type: "text",
-      rows: 2,
-    }),
-    defineField({
-      name: "mayJuneHours",
-      title: "May–June Hours",
-      type: "text",
-      rows: 3,
+      name: "hoursSchedules",
+      title: "Hours Schedules",
+      type: "array",
+      description:
+        "Dated hour blocks in chronological order. Each schedule becomes active on its start date and runs until its end date, the next schedule begins, or the season closes.",
+      of: [
+        {
+          type: "object",
+          name: "hoursSchedule",
+          title: "Schedule",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Label",
+              type: "string",
+              description: 'Shown above the hours list (e.g. "May–June", "Summer").',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "startsOn",
+              title: "Starts On",
+              type: "date",
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "endsOn",
+              title: "Ends On",
+              type: "date",
+              description: "Optional. Leave empty to run until the next schedule starts or the season ends.",
+            }),
+            defineField({
+              name: "hours",
+              title: "Hours",
+              type: "text",
+              rows: 5,
+              description:
+                'One line per day range, e.g. "Monday – Friday: 10AM-7PM". Optional first line can repeat the label.',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "noticeBefore",
+              title: "Notice (before start)",
+              type: "text",
+              rows: 2,
+              description: "Optional banner shown during the start month before this schedule begins.",
+            }),
+            defineField({
+              name: "noticeDuring",
+              title: "Notice (while active)",
+              type: "text",
+              rows: 2,
+              description: "Optional banner shown while this schedule is in effect.",
+            }),
+          ],
+          preview: {
+            select: { title: "title", startsOn: "startsOn", endsOn: "endsOn" },
+            prepare({ title, startsOn, endsOn }) {
+              return {
+                title: title || "Schedule",
+                subtitle: [startsOn, endsOn].filter(Boolean).join(" → "),
+              };
+            },
+          },
+        },
+      ],
     }),
     defineField({
       name: "mapsUrl",

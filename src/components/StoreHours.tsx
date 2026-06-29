@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getHoursBlocks, getMillisecondsUntilNextStatusChange, getOpenStatus } from "@/lib/hours";
+import { getHoursBlocks, getHoursNotice, getMillisecondsUntilNextStatusChange, getOpenStatus } from "@/lib/hours";
 import type { SiteSettings } from "@/sanity/types";
 
 type StoreHoursProps = {
@@ -10,13 +10,16 @@ type StoreHoursProps = {
 
 export function StoreHours({ settings }: StoreHoursProps) {
   const [status, setStatus] = useState(() => getOpenStatus(settings));
-  const blocks = getHoursBlocks(settings);
+  const [notice, setNotice] = useState(() => getHoursNotice(settings));
+  const [blocks, setBlocks] = useState(() => getHoursBlocks(settings));
 
   useEffect(() => {
     let timeoutId = 0;
 
     const updateStatus = () => {
       setStatus(getOpenStatus(settings));
+      setNotice(getHoursNotice(settings));
+      setBlocks(getHoursBlocks(settings));
       const delay = getMillisecondsUntilNextStatusChange(settings);
       timeoutId = window.setTimeout(updateStatus, Math.max(delay, 1000));
     };
@@ -56,6 +59,14 @@ export function StoreHours({ settings }: StoreHoursProps) {
               {status.heading}
             </h3>
             <p className="mt-1 text-sm text-white/75">{status.detail}</p>
+            {notice ? (
+              <p className="mt-3 rounded-button border border-[#ffd166]/35 bg-[#ffd166]/15 px-3 py-2 text-sm leading-snug text-[#fff4cc]">
+                <span className="font-[family-name:var(--font-oswald)] text-[11px] font-medium uppercase tracking-[0.14em] text-[#ffd166]">
+                  Notice
+                </span>
+                <span className="mt-1 block">{notice}</span>
+              </p>
+            ) : null}
           </div>
 
           <div className="rounded-button border border-white/15 bg-white/10 px-3 py-1.5">

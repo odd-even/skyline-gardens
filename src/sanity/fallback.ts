@@ -22,9 +22,30 @@ export const fallbackData: HomepageData = {
     instagramUrl: "https://www.instagram.com/skyline_gardens/",
     seasonOpensOn: "2026-04-27",
     seasonClosesOn: "2026-09-15",
-    aprilHours: "APRIL\nSaturday: 10AM-3PM",
-    mayJuneHours:
-      "MAY-JUNE\nMonday – Friday: 10AM-7PM\nSaturday: 10AM-5PM\nSunday: 10AM-4PM",
+    hoursSchedules: [
+      {
+        title: "April",
+        startsOn: "2026-04-27",
+        endsOn: "2026-04-30",
+        hours: "APRIL\nSaturday: 10AM-3PM",
+      },
+      {
+        title: "May–June",
+        startsOn: "2026-05-01",
+        endsOn: "2026-06-25",
+        hours:
+          "MAY-JUNE\nMonday – Friday: 10AM-7PM\nSaturday: 10AM-5PM\nSunday: 10AM-4PM",
+      },
+      {
+        title: "Summer",
+        startsOn: "2026-06-26",
+        hours:
+          "SUMMER\nMonday – Friday: 10AM-5PM\nSaturday: 10AM-5PM\nSunday: 10AM-4PM",
+        noticeBefore:
+          "Starting Friday, June 26, we will close at 5 pm weekdays until closing day. Thank you.",
+        noticeDuring: "We close at 5 pm weekdays until closing day. Thank you.",
+      },
+    ],
     mapsUrl:
       "https://www.google.com/maps/dir/?api=1&destination=644+Route+616,+Keswick+Ridge,+NB+E6L+1S8",
     familyCentreTitle: "Your Local Family Garden Centre",

@@ -19,8 +19,14 @@ export const siteSettingsQuery = groq`
     instagramUrl,
     seasonOpensOn,
     seasonClosesOn,
-    aprilHours,
-    mayJuneHours,
+    hoursSchedules[]{
+      title,
+      startsOn,
+      endsOn,
+      hours,
+      noticeBefore,
+      noticeDuring
+    },
     mapsUrl,
     familyCentreTitle,
     familyCentreText

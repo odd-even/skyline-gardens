@@ -1,4 +1,4 @@
-import type { SiteSettings } from "@/sanity/types";
+import type { HoursSchedule, SiteSettings } from "@/sanity/types";
 
 const TIME_ZONE = "America/Moncton";
 const OPENING_SOON_DAYS = 30;
@@ -37,6 +37,10 @@ type AtlanticDateTime = CalendarDate & {
   secondsSinceMidnight: number;
 };
 
+type ResolvedSchedule = HoursSchedule & {
+  effectiveEnd: CalendarDate;
+};
+
 function parseIsoDate(iso: string): CalendarDate {
   const [year, month, day] = iso.split("-").map(Number);
   return { year, month, day };
@@ -44,6 +48,11 @@ function parseIsoDate(iso: string): CalendarDate {
 
 function toComparable({ year, month, day }: CalendarDate): number {
   return year * 10_000 + month * 100 + day;
+}
+
+function isBetweenInclusive(today: CalendarDate, start: CalendarDate, end: CalendarDate): boolean {
+  const value = toComparable(today);
+  return value >= toComparable(start) && value <= toComparable(end);
 }
 
 function addDays(date: CalendarDate, days: number): CalendarDate {
@@ -250,7 +259,7 @@ function parseScheduleLine(line: string): ScheduleRow | null {
   };
 }
 
-export function parseHoursBlock(text: string): HoursBlock {
+export function parseHoursBlock(text: string, titleOverride?: string): HoursBlock {
   const lines = text
     .split("\n")
     .map((line) => line.trim())
@@ -259,7 +268,7 @@ export function parseHoursBlock(text: string): HoursBlock {
   const [title = "Hours", ...scheduleLines] = lines;
 
   return {
-    title,
+    title: titleOverride || title,
     rows: scheduleLines
       .map(parseScheduleLine)
       .filter((row): row is ScheduleRow => row !== null),
@@ -270,24 +279,125 @@ function minutesToSeconds(minutes: number): number {
   return minutes * 60;
 }
 
+function formatIsoDate({ year, month, day }: CalendarDate): string {
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+function buildLegacySchedules(settings: SiteSettings): HoursSchedule[] {
+  const lateStart = settings.lateSeasonHoursStartOn ?? "2026-06-26";
+  const mayJuneEnd = addDays(parseIsoDate(lateStart), -1);
+
+  return [
+    {
+      title: "April",
+      startsOn: settings.seasonOpensOn,
+      hours: settings.aprilHours ?? "APRIL\nSaturday: 10AM-3PM",
+    },
+    {
+      title: "May–June",
+      startsOn: "2026-05-01",
+      endsOn: formatIsoDate(mayJuneEnd),
+      hours:
+        settings.mayJuneHours ??
+        "MAY-JUNE\nMonday – Friday: 10AM-7PM\nSaturday: 10AM-5PM\nSunday: 10AM-4PM",
+    },
+    {
+      title: "Summer",
+      startsOn: lateStart,
+      hours:
+        settings.lateSeasonHours ??
+        "SUMMER\nMonday – Friday: 10AM-5PM\nSaturday: 10AM-5PM\nSunday: 10AM-4PM",
+      noticeDuring: "We close at 5 pm weekdays until closing day. Thank you.",
+    },
+  ];
+}
+
+function getRawSchedules(settings: SiteSettings): HoursSchedule[] {
+  if (settings.hoursSchedules?.length) {
+    return settings.hoursSchedules;
+  }
+
+  if (settings.aprilHours || settings.mayJuneHours || settings.lateSeasonHours) {
+    return buildLegacySchedules(settings);
+  }
+
+  return [];
+}
+
+function resolveSchedules(settings: SiteSettings): ResolvedSchedule[] {
+  const { closesOn } = getSeasonDates(settings);
+  const sorted = [...getRawSchedules(settings)].sort(
+    (a, b) => toComparable(parseIsoDate(a.startsOn)) - toComparable(parseIsoDate(b.startsOn)),
+  );
+
+  return sorted.map((schedule, index) => {
+    const next = sorted[index + 1];
+    let effectiveEnd = closesOn;
+
+    if (schedule.endsOn) {
+      effectiveEnd = parseIsoDate(schedule.endsOn);
+    } else if (next) {
+      effectiveEnd = addDays(parseIsoDate(next.startsOn), -1);
+    }
+
+    return { ...schedule, effectiveEnd };
+  });
+}
+
+function getActiveScheduleForDay(
+  settings: SiteSettings,
+  today: CalendarDate,
+): ResolvedSchedule | null {
+  const schedules = resolveSchedules(settings);
+
+  for (const schedule of schedules) {
+    const start = parseIsoDate(schedule.startsOn);
+    if (isBetweenInclusive(today, start, schedule.effectiveEnd)) {
+      return schedule;
+    }
+  }
+
+  return schedules.at(-1) ?? null;
+}
+
+export function getHoursNotice(settings: SiteSettings, date = new Date()): string | null {
+  if (getSeasonPhase(settings, date) !== "in-season") {
+    return null;
+  }
+
+  const today = getAtlanticCalendarDate(date);
+  const { closesOn } = getSeasonDates(settings);
+
+  if (toComparable(today) > toComparable(closesOn)) {
+    return null;
+  }
+
+  const active = getActiveScheduleForDay(settings, today);
+  if (active?.noticeDuring && isBetweenInclusive(today, parseIsoDate(active.startsOn), active.effectiveEnd)) {
+    return active.noticeDuring;
+  }
+
+  for (const schedule of resolveSchedules(settings)) {
+    const start = parseIsoDate(schedule.startsOn);
+    if (
+      schedule.noticeBefore &&
+      toComparable(today) < toComparable(start) &&
+      today.month === start.month
+    ) {
+      return schedule.noticeBefore;
+    }
+  }
+
+  return null;
+}
+
 function getActiveRows(settings: SiteSettings, now: AtlanticDateTime): ScheduleRow[] {
-  const { opensOn } = getSeasonDates(settings);
-  const april = parseHoursBlock(settings.aprilHours);
-  const mayJune = parseHoursBlock(settings.mayJuneHours);
-
-  if (now.month === opensOn.month) {
-    return april.rows;
+  const active = getActiveScheduleForDay(settings, now);
+  if (!active) {
+    return [];
   }
 
-  if (now.month === 5 || now.month === 6) {
-    return mayJune.rows;
-  }
-
-  if (now.month > opensOn.month) {
-    return mayJune.rows;
-  }
-
-  return mayJune.rows;
+  return parseHoursBlock(active.hours, active.title).rows;
 }
 
 function findTodayRow(rows: ScheduleRow[], weekday: number): ScheduleRow | undefined {
@@ -440,6 +550,29 @@ function getMillisecondsUntilDate(target: CalendarDate, date = new Date()): numb
   return (diffDays * 24 * 60 * 60 - (24 * 60 * 60 - secondsUntilMidnight)) * 1000;
 }
 
+function getMillisecondsUntilNextScheduleChange(settings: SiteSettings, date = new Date()): number | null {
+  const today = getAtlanticCalendarDate(date);
+  const schedules = resolveSchedules(settings);
+  let soonest: number | null = null;
+
+  for (const schedule of schedules) {
+    const start = parseIsoDate(schedule.startsOn);
+    const end = addDays(schedule.effectiveEnd, 1);
+
+    for (const boundary of [start, end]) {
+      const value = toComparable(boundary);
+      if (value <= toComparable(today)) {
+        continue;
+      }
+
+      const delay = getMillisecondsUntilDate(boundary, date);
+      soonest = soonest === null ? delay : Math.min(soonest, delay);
+    }
+  }
+
+  return soonest;
+}
+
 export function getMillisecondsUntilNextStatusChange(
   settings: SiteSettings,
   date = new Date(),
@@ -459,17 +592,24 @@ export function getMillisecondsUntilNextStatusChange(
   const now = getAtlanticDateTime(date);
   const activeRows = getActiveRows(settings, now);
   const todayRow = findTodayRow(activeRows, now.weekday);
+  const scheduleChangeDelay = getMillisecondsUntilNextScheduleChange(settings, date);
 
   if (todayRow) {
     const openSeconds = minutesToSeconds(todayRow.openMinutes);
     const closeSeconds = minutesToSeconds(todayRow.closeMinutes);
 
     if (now.secondsSinceMidnight < openSeconds) {
-      return (openSeconds - now.secondsSinceMidnight) * 1000;
+      const openDelay = (openSeconds - now.secondsSinceMidnight) * 1000;
+      return scheduleChangeDelay === null
+        ? openDelay
+        : Math.min(openDelay, scheduleChangeDelay);
     }
 
     if (now.secondsSinceMidnight < closeSeconds) {
-      return (closeSeconds - now.secondsSinceMidnight) * 1000;
+      const closeDelay = (closeSeconds - now.secondsSinceMidnight) * 1000;
+      return scheduleChangeDelay === null
+        ? closeDelay
+        : Math.min(closeDelay, scheduleChangeDelay);
     }
   }
 
@@ -481,9 +621,14 @@ export function getMillisecondsUntilNextStatusChange(
     return getMillisecondsUntilDate(addDays(closesOn, 1), date);
   }
 
-  return getMillisecondsUntilMidnight(date);
+  const midnightDelay = getMillisecondsUntilMidnight(date);
+  return scheduleChangeDelay === null
+    ? midnightDelay
+    : Math.min(midnightDelay, scheduleChangeDelay);
 }
 
 export function getHoursBlocks(settings: SiteSettings): HoursBlock[] {
-  return [parseHoursBlock(settings.aprilHours), parseHoursBlock(settings.mayJuneHours)];
+  return resolveSchedules(settings).map((schedule) =>
+    parseHoursBlock(schedule.hours, schedule.title),
+  );
 }

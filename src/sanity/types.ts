@@ -1,3 +1,12 @@
+export type HoursSchedule = {
+  title: string;
+  startsOn: string;
+  endsOn?: string;
+  hours: string;
+  noticeBefore?: string;
+  noticeDuring?: string;
+};
+
 export type SiteSettings = {
   title: string;
   heroTitle: string;
@@ -16,8 +25,12 @@ export type SiteSettings = {
   instagramUrl: string;
   seasonOpensOn: string;
   seasonClosesOn: string;
-  aprilHours: string;
-  mayJuneHours: string;
+  hoursSchedules?: HoursSchedule[];
+  /** @deprecated Use hoursSchedules — kept for older Sanity documents */
+  aprilHours?: string;
+  mayJuneHours?: string;
+  lateSeasonHoursStartOn?: string;
+  lateSeasonHours?: string;
   mapsUrl: string;
   familyCentreTitle: string;
   familyCentreText: string;
