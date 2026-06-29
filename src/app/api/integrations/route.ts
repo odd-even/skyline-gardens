@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import { getProducts } from "@/lib/products";
 import { isSanityConfigured, projectId as sanityProjectId } from "@/sanity/client";
-
-function getResendApiKey() {
-  return process.env.RESEND_API_KEY ?? process.env.SkylineEmailKey;
-}
+import { getContactEmail, getFromAddress, getResendApiKey } from "@/lib/email";
 
 export async function GET() {
   const products = await getProducts();
@@ -31,7 +28,8 @@ export async function GET() {
     },
     contact: {
       configured: Boolean(getResendApiKey()),
-      recipient: process.env.CONTACT_EMAIL ?? "info@skylinegardens.ca",
+      recipient: getContactEmail(),
+      from: getFromAddress(),
     },
   });
 }

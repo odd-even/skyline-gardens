@@ -35,15 +35,19 @@ NEXT_PUBLIC_SANITY_DATASET=production
 
 ## Contact form
 
-The contact form works out of the box (logs to console in dev). For production email delivery on Vercel:
+The contact form posts to `/api/contact` and sends via [Resend](https://resend.com). Without an API key, submissions are logged to the server console.
 
-1. Sign up at [resend.com](https://resend.com)
-2. Add to `.env.local`:
+1. Sign up at [resend.com](https://resend.com) and create an API key
+2. Verify your domain (`skylinegardens.ca`) in Resend
+3. Add to `.env.local`:
 
 ```env
 RESEND_API_KEY=re_...
 CONTACT_EMAIL=info@skylinegardens.ca
+RESEND_FROM_EMAIL=Skyline Gardens <noreply@skylinegardens.ca>
 ```
+
+Check configuration at `/api/integrations` — `contact.configured` should be `true`.
 
 ## Deploy to Vercel
 
