@@ -5,10 +5,15 @@ import { EmailListPopup } from "@/components/EmailListPopup";
 import { ClickToCall } from "@/components/ClickToCall";
 import { Footer } from "@/components/Footer";
 import { SiteLocationMap } from "@/components/SiteLocationMap";
+import { StructuredData } from "@/components/StructuredData";
+import { getSiteSettings } from "@/sanity/fetch";
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSiteSettings();
+
   return (
     <>
+      <StructuredData settings={settings} />
       <ElfsightScript />
       <EmailListPopup />
       <ClickToCall />

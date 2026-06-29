@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Oswald, Roboto, Roboto_Condensed } from "next/font/google";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const oswald = Oswald({
@@ -23,16 +24,34 @@ const robotoCondensed = Roboto_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: "Skyline Gardens – Your local family garden center",
-  description:
-    "Skyline Gardens – your local family garden centre in Keswick Ridge, NB. Bedding plants, perennials, vegetables, succulents, hanging baskets, and more.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} – Your local family garden center`,
+    template: `%s – ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  category: "Garden center",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Skyline Gardens",
-    description: "Your local family garden centre in Keswick Ridge, NB",
-    url: "https://www.skylinegardens.ca",
-    siteName: "Skyline Gardens",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
     locale: "en_CA",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
   },
 };
 
@@ -43,9 +62,12 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="en-CA"
       className={`${oswald.variable} ${roboto.variable} ${robotoCondensed.variable}`}
     >
+      <head>
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="Summary for AI systems" />
+      </head>
       <body className="bg-white antialiased">{children}</body>
     </html>
   );
