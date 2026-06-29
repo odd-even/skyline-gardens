@@ -1,45 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-
-function getResendApiKey() {
-  return process.env.RESEND_API_KEY ?? process.env.SkylineEmailKey;
-}
+import { getContactEmail, sendEmail } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { name, email, message } = body;
+  const name = String(body.name ?? "").trim();
+  const email = String(body.email ?? "").trim();
+  const message = String(body.message ?? "").trim();
 
   if (!name || !email || !message) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   }
 
-  const contactEmail = process.env.CONTACT_EMAIL ?? "info@skylinegardens.ca";
-  const resendKey = getResendApiKey();
+  const result = await sendEmail({
+    to: getContactEmail(),
+    replyTo: email,
+    subject: `Website message from ${name}`,
+    text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
+  });
 
-  if (resendKey) {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${resendKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "Skyline Gardens <onboarding@resend.dev>",
-        to: contactEmail,
-        reply_to: email,
-        subject: `Website message from ${name}`,
-        text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
-      }),
-    });
-
-    if (!response.ok) {
-      return NextResponse.json({ error: "Email failed" }, { status: 500 });
-    }
-  } else {
-    console.log("Contact form submission (no RESEND_API_KEY configured):", {
-      name,
-      email,
-      message,
-    });
+  if (!result.sent && result.reason === "api_error") {
+    return NextResponse.json({ error: "Email failed" }, { status: 500 });
   }
 
   return NextResponse.json({ success: true });
