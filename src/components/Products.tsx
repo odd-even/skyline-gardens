@@ -46,7 +46,7 @@ export function Products({ intro, categories, highlights }: ProductsProps) {
                   className="h-auto max-h-28 w-auto object-contain"
                 />
               </div>
-              <h3 className="mb-2 font-[family-name:var(--font-heading)] text-base font-bold leading-tight text-skyline-gray lg:text-lg">
+              <h3 className="mb-2 font-[family-name:var(--font-heading)] text-lg font-bold leading-tight text-skyline-gray sm:text-xl lg:text-2xl">
                 {item.title}
               </h3>
               {item.description && (

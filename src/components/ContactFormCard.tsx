@@ -1,4 +1,4 @@
-import { ContactFormEmbed } from "./ContactFormEmbed";
+import { ContactForm } from "./ContactForm";
 
 export function ContactFormCard() {
   return (
@@ -10,7 +10,7 @@ export function ContactFormCard() {
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col bg-white px-5 py-5 sm:px-6">
-        <ContactFormEmbed />
+        <ContactForm />
       </div>
     </div>
   );
