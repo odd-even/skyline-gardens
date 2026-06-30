@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-function getResendApiKey() {
-  return process.env.RESEND_API_KEY ?? process.env.SkylineEmailKey;
-}
+import { sendContactEmail } from "@/lib/send-contact-email";
 
 function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -40,37 +37,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
   }
 
-  const contactEmail = process.env.CONTACT_EMAIL ?? "info@skylinegardens.ca";
-  const resendKey = getResendApiKey();
-  const fromAddress =
-    process.env.CONTACT_FROM ?? "Skyline Gardens <onboarding@resend.dev>";
-
-  if (!resendKey) {
-    console.log("Contact form submission (no RESEND_API_KEY configured):", {
-      name: trimmedName,
-      email: trimmedEmail,
-      message: trimmedMessage,
-    });
-    return NextResponse.json({ success: true });
-  }
-
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${resendKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: fromAddress,
-      to: contactEmail,
-      reply_to: trimmedEmail,
-      subject: `Website message from ${trimmedName}`,
-      text: `Name: ${trimmedName}\nEmail: ${trimmedEmail}\n\n${trimmedMessage}`,
-    }),
+  const result = await sendContactEmail({
+    name: trimmedName,
+    email: trimmedEmail,
+    message: trimmedMessage,
   });
 
-  if (!response.ok) {
-    console.error("Resend contact email failed:", await response.text());
+  if (!result.ok) {
     return NextResponse.json(
       { error: "Unable to send your message right now. Please call or email us directly." },
       { status: 500 },

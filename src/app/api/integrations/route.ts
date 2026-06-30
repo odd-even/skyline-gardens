@@ -9,6 +9,9 @@ function getResendApiKey() {
 export async function GET() {
   const products = await getProducts();
 
+  const smtp2goConfigured = Boolean(process.env.SMTP2GO_API_KEY);
+  const resendConfigured = Boolean(getResendApiKey());
+
   return NextResponse.json({
     maps: {
       configured: Boolean(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY),
@@ -30,7 +33,8 @@ export async function GET() {
       projectId: sanityProjectId,
     },
     contact: {
-      configured: Boolean(getResendApiKey()),
+      configured: smtp2goConfigured || resendConfigured,
+      provider: smtp2goConfigured ? "smtp2go" : resendConfigured ? "resend" : "none",
       recipient: process.env.CONTACT_EMAIL ?? "info@skylinegardens.ca",
     },
   });
